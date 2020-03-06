@@ -9,18 +9,25 @@ document.querySelector('#increment').addEventListener('click', () => {
     socket.emit('increment');
 }); */
 
-/* socket.on('message', (message) => {
-    var textnode = document.createTextNode(message);
-    document.querySelector('#whatTheF').appendChild(textnode);
+document.querySelector('#location_button').addEventListener('click', () => {   
+    if(!navigator.geolocation){
+        console.log('no no no');
+        return alert('Geolocation is not supported by your browser.');
+       
+    } else {
+        navigator.geolocation.getCurrentPosition((position) => {
+            const lat_long = position.coords.latitude + ' ' + position.coords.longitude;
+            console.log('did this run')
+            socket.emit('sendLocation', lat_long);
+            console.log(lat_long);
+        }); 
+    }
 });
- */
 
-socket.on('getMessage', (uMessage) => {
-    var textnode = document.createTextNode(uMessage);
-    linebreak = document.createElement("br");
-    document.querySelector('#message').appendChild(textnode);
-    document.querySelector('#message').appendChild(linebreak);
-    console.log(uMessage);
+
+
+socket.on('giveLocation', (position) => {
+    console.log('Location:', position);
 });
 
 document.getElementById('myForm').addEventListener('submit', logSubmit);
@@ -35,6 +42,22 @@ function logSubmit(e) {
     document.getElementById("myForm").reset();
 }
   
+/* socket.on('message', (message) => {
+    var textnode = document.createTextNode(message);
+    //document.querySelector('#message').appendChild(textnode);
+    console.log(message);
+}); */
+ 
+socket.on('getMessage', (uMessage) => {
+    var textnode = document.createTextNode(uMessage);
+    linebreak = document.createElement("br");
+    document.querySelector('#message').appendChild(textnode);
+    document.querySelector('#message').appendChild(linebreak);
+    console.log(uMessage);
+});
+
+
+
 /* window.onload = function() {
     var form = document.querySelector("form");
     form.onsubmit = submitted.bind(form);

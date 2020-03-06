@@ -23,9 +23,19 @@ let uMessage = '';
 io.on('connection', (socket) => {
     console.log('New Websocket connection');
     socket.emit('message', 'Hello, welcome to the chat!');
+    socket.broadcast.emit('message', 'A new user has joined!');
+    
+    socket.on('disconnect', () => {
+        io.emit('message', "User has left the chat!");
+    });
+
     socket.on('uMessage', (message)=> {
         io.emit('getMessage', message);
     });
+
+    socket.on('sendLocation', (position) => {
+        io.emit('giveLocation', position)
+    })
     /*socket.emit('countUpdated', count);
 
      socket.on('increment', () => {
